@@ -996,7 +996,7 @@ class Con(object):
             'border', 'current_border_width', 'floating', 'focus', 'focused',
             'fullscreen_mode', 'id', 'layout', 'marks', 'name', 'num',
             'orientation', 'percent', 'scratchpad_state', 'sticky', 'type',
-            'urgent', 'window', 'pid'
+            'urgent', 'window', 'pid', 'visible'
         ]
         for attr in ipc_properties:
             if attr in data:
@@ -1057,6 +1057,12 @@ class Con(object):
         self.gaps = None
         if 'gaps' in data:
             self.gaps = Gaps(data['gaps'])
+
+        if self.type == 'workspace':
+            for ws in conn.get_workspaces():
+                if self.num == ws['num']:
+                    self.visible = ws['visible']
+                    break
 
     def __iter__(self):
         """
